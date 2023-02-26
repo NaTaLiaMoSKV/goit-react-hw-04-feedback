@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Statistics from "./Statistics";
 import FeedbackOptions from "./FeedbackOptions";
 import Notification from "./Notification";
+// import Section from "./Section";
 
 class Feedback extends Component {
 
@@ -11,28 +12,15 @@ class Feedback extends Component {
         bad: 0
     }
 
-    handleGoodBtn = () => {
-        this.setState(prevState => ({
-            good: prevState.good + 1,
-        }), () => {
+    handleButton = (event) => {
+        const innerText = event.currentTarget.textContent;
+        this.setState(prevState => {
+             if (innerText === 'good')  return { [innerText]: prevState.good + 1, }
+             if (innerText === 'neutral')  return { [innerText]: prevState.neutral + 1, }
+             if (innerText === 'bad')  return { [innerText]: prevState.bad + 1, }
+        }, () => {
             this.countTotalFeedback();
-        });
-    }
-
-    handleNeutralBtn = () => {
-        this.setState(prevState => ({
-            neutral: prevState.neutral + 1,
-        }), () => {
-            this.countTotalFeedback();
-        });
-    }
-
-    handleBadBtn = () => {
-        this.setState(prevState => ({
-            bad: prevState.bad + 1,
-        }), () => {
-            this.countTotalFeedback();
-        });
+        })
     }
 
     countTotalFeedback = () => {
@@ -43,14 +31,15 @@ class Feedback extends Component {
         return (this.state.good / (this.state.good + this.state.neutral + this.state.bad) * 100).toFixed();
     }
 
-    render() {
+    render() { 
+        const { good, neutral, bad } = this.state;
         return (
             <>
-                <FeedbackOptions options={this.state} onGoodBtn={this.handleGoodBtn} onNeutralBtn={this.handleNeutralBtn} onBadBtn={this.handleBadBtn}/>
+                <FeedbackOptions options={this.state} onLeaveFeedback={this.handleButton} />
                 {
                     this.countTotalFeedback() === 0
                     ? <Notification message="No feedback given" />
-                    : <Statistics good={this.state.good} neutral={this.state.neutral} bad={this.state.bad} total={this.countTotalFeedback()} positivePercentage={this.countPositiveFeedbackPercentage()}/>
+                    : <Statistics good={good} neutral={neutral} bad={bad} total={this.countTotalFeedback()} positivePercentage={this.countPositiveFeedbackPercentage()}/>
                 }
             </>
         );
