@@ -1,7 +1,8 @@
 import React from "react";
 import Section from "./Section";
 
-const FeedbackOptions = ({options, onLeaveFeedback}) => { 
+export default function FeedbackOptions({ options, onLeaveFeedback }) { 
+    
     return (
         <div className="buttons">
             <Section title="Please leave feedback" />
@@ -11,5 +12,3 @@ const FeedbackOptions = ({options, onLeaveFeedback}) => {
         </div>
     )
 }
-
-export default FeedbackOptions;
